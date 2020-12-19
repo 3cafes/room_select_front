@@ -1,20 +1,27 @@
 <template>
-	<img alt="Vue logo" src="./assets/logo.png" />
-	<WelcomeSF />
+	<!-- <WelcomeSF /> -->
+	<Header></Header>
+	<div class="room-select">
+		<RoomSelector class=".room-form"></RoomSelector>
+	</div>
 </template>
 
 <script>
-import WelcomeSF from './components/WelcomeSF.vue';
+// import WelcomeSF from './components/WelcomeSF';
+import Header from '@/components/Header';
+import RoomSelector from './pages/RoomSelector.vue';
 
 export default {
 	name: 'App',
 	components: {
-		WelcomeSF,
+		// WelcomeSF,
+		Header,
+		RoomSelector,
 	},
 };
 </script>
 
-<style>
+<style lang="scss">
 @font-face {
 	font-family: 'FabrikatBold';
 	src: url(./fonts/Fabrikat-Bold.woff) format('woff');
@@ -27,11 +34,19 @@ export default {
 	font-family: 'PoppinsMedium';
 	src: url(./fonts/Poppins-Medium.ttf) format('truetype');
 }
+body {
+	margin: 0;
+}
 #app {
-	font-family: Poppins-Light, sans-serif;
+	font-family: PoppinsLight, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
+	color: $dark;
+}
+.room-select {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 </style>

@@ -2,8 +2,14 @@ $light: #fff;
 $dark: #000;
 $main: #ff00ae;
 
-$font-title: FanrikatBold;
+$font-title: FabrikatBold;
 $font-text: PoppinsLight;
+
+@mixin title-hero {
+	font-family: $font-title, sans-serif;
+	font-weight: 500;
+	font-size: 3.375rem;
+}
 
 @mixin title-1 {
 	font-family: $font-title, sans-serif;
