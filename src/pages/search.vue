@@ -5,42 +5,48 @@
 			v-bind:equipments="equipments"
 			@validate="onSearch"
 		></RoomSelectorForm>
-		<div class="reservable-container">
+		<div v-if="best_result != undefined" class="reservable-container">
 			<h1>#BEST SALLE</h1>
-			<reservable :room="room"></reservable>
+			<reservable :room="best_result" @reserve="onReserve"></reservable>
 		</div>
-		<div class="reservable-container">
+		<div
+			v-if="other_search_results && other_search_results.length >= 1"
+			class="reservable-container"
+		>
 			<h1>MAIS AUSSI</h1>
-			<template v-for="result in other_search_results" :key="result.id">
-				<reservable :room="room"></reservable>
+			<template v-for="room in other_search_results" :key="room.id">
+				<reservable :room="room" @reserve="onReserve"></reservable>
 				<div class="reservable-spacer"></div>
 			</template>
 		</div>
+		<ReservationError
+			v-if="reservation != undefined && best_result == undefined"
+			message="aucune salle ne corespond à votre recherche"
+			button_message="réessayer"
+			@click="resetResults"
+		></ReservationError>
 	</div>
 </template>
 
 <script>
 import RoomSelectorForm from '@/components/RoomSelectorForm';
-import { get_equipments } from '@/api/equipments';
-import Reservable from '../components/Reservable.vue';
+import { get_equipments } from '@/api/equipment';
+import { search_room_available, reserve_room } from '@/api/reservation';
+import Reservable from '@/components/Reservable.vue';
+import ReservationError from '@/components/ReservationError.vue';
 
 export default {
 	name: 'Search',
 	components: {
 		RoomSelectorForm,
 		Reservable,
+		ReservationError,
 	},
 	data: () => ({
 		equipments: [],
-		best_result: [],
-		other_search_results: [1, 2, 3],
-		room: {
-			name: 'hello',
-			capacity: 23,
-			equipments: ['un truc', 'un autre'],
-			description:
-				'a a klekmfek mkl mrk lmrgk lmrkg mze ùzkaù kke fj bkjhf oji fepofk opf koe ajofpezk foz*e k',
-		},
+		best_result: undefined,
+		other_search_results: undefined,
+		reservation: undefined,
 	}),
 	mounted() {
 		get_equipments()
@@ -50,8 +56,53 @@ export default {
 			.catch(() => {});
 	},
 	methods: {
-		onSearch() {
-			console.log('from on validate!');
+		resetResults() {
+			this.reservation = undefined;
+			this.best_result = undefined;
+			this.other_search_results = undefined;
+		},
+		onSearch(search) {
+			this.reservation = {
+				date: search.date.format('YYYY-MM-DD'),
+				from: search.from.format('HH:mm'),
+				to: search.to.format('HH:mm'),
+				capacity: search.capacity,
+				equipments: search.equipments,
+			};
+			search_room_available(
+				this.reservation.date,
+				this.reservation.from,
+				this.reservation.to,
+				this.reservation.capacity,
+				this.reservation.equipments
+			)
+				.then(({ rooms }) => {
+					console.log(rooms);
+					this.best_result = rooms[0];
+					this.other_search_results = rooms.slice(1);
+				})
+				.catch((e) => {
+					this.best_result = undefined;
+					this.other_search_results = undefined;
+				});
+		},
+		onReserve(room) {
+			console.log('reserve room ', room.name);
+			reserve_room(
+				room.name,
+				this.reservation.date,
+				this.reservation.from,
+				this.reservation.to
+			)
+				.then(({ message }) => {
+					console.log(message);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+				.finally(() => {
+					this.resetResults();
+				});
 		},
 	},
 };

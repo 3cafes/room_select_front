@@ -9,24 +9,33 @@
 				:label-col="{ span: 7 }"
 				:wrapper-col="{ span: 13 }"
 			>
-				<a-form-item label="date" required name="date">
+				<a-form-item label="date" name="date">
 					<a-date-picker v-model:value="form.date" placeholder="date" />
 				</a-form-item>
-				<a-form-item label="début" required name="from">
+				<a-form-item label="début" name="from">
 					<a-time-picker
 						v-model:value="form.from"
 						placeholder="début"
 						format="HH\h mm"
-						:minute-step="15"
+						:minute-step="30"
 					></a-time-picker>
 				</a-form-item>
-				<a-form-item label="fin" required name="to">
+				<a-form-item label="fin" name="to">
 					<a-time-picker
 						v-model:value="form.to"
 						placeholder="fin"
 						format="HH\h mm"
-						:minute-step="15"
+						:minute-step="30"
 					></a-time-picker>
+				</a-form-item>
+				<a-form-item label="places" name="capacity">
+					<a-input-number
+						id="inputNumber"
+						v-model:value="form.capacity"
+						:min="1"
+						:max="442"
+						placeholder="persones"
+					></a-input-number>
 				</a-form-item>
 				<a-form-item v-if="equipments != []" label="Equipement">
 					<a-checkbox-group v-model:value="form.equipments">
@@ -49,15 +58,18 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
 	name: 'RoomSelector',
 	props: ['equipments'],
 	data() {
 		return {
 			form: {
-				date: undefined,
-				from: undefined,
-				to: undefined,
+				date: moment(),
+				from: moment('09:00', 'HH:mm'),
+				to: moment('23:00', 'HH:mm'),
+				capacity: 1,
 				equipments: [],
 			},
 			rules: {
@@ -80,6 +92,13 @@ export default {
 						required: true,
 						message: "sélectionnez l'heure de fin",
 						type: 'object',
+					},
+				],
+				capacity: [
+					{
+						required: true,
+						message: 'séléctionnez le nombre de personnes',
+						type: 'number',
 					},
 				],
 			},

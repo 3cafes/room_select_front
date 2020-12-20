@@ -2,7 +2,14 @@ import { createApp } from 'vue';
 import App from './App.vue';
 
 //ui lib
-import { Button, DatePicker, TimePicker, Form, Checkbox } from 'ant-design-vue';
+import {
+	Button,
+	DatePicker,
+	TimePicker,
+	Form,
+	Checkbox,
+	InputNumber,
+} from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
 //pages
@@ -25,6 +32,7 @@ app
 	.use(DatePicker)
 	.use(TimePicker)
 	.use(Form)
-	.use(Checkbox);
+	.use(Checkbox)
+	.use(InputNumber);
 
 app.mount('#app');
