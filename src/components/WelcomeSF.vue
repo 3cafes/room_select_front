@@ -35,7 +35,7 @@ export default {
 <style scoped lang="scss">
 .background {
 	position: fixed;
-	z-index: 1;
+	z-index: 42;
 	top: 0;
 	left: 0;
 	height: 100vh;

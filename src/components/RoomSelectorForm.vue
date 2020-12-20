@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<h1>Reservez une sale</h1>
+		<h1>Reservez une salle</h1>
 		<div class="form-container">
 			<a-form
 				ref="form"
@@ -10,16 +10,17 @@
 				:wrapper-col="{ span: 13 }"
 			>
 				<a-form-item label="date" required name="date">
-					<a-date-picker v-model:value="form.date1" placeholder="date" />
+					<a-date-picker v-model:value="form.date" placeholder="date" />
 				</a-form-item>
-				<a-form-item label="durée" required name="hours">
+				<a-form-item label="début" required name="from">
 					<a-time-picker
 						v-model:value="form.from"
 						placeholder="début"
 						format="HH\h mm"
 						:minute-step="15"
 					></a-time-picker>
-					à
+				</a-form-item>
+				<a-form-item label="fin" required name="to">
 					<a-time-picker
 						v-model:value="form.to"
 						placeholder="fin"
@@ -27,13 +28,15 @@
 						:minute-step="15"
 					></a-time-picker>
 				</a-form-item>
-				<a-form-item label="Equipement">
+				<a-form-item v-if="equipments != []" label="Equipement">
 					<a-checkbox-group v-model:value="form.equipments">
-						<a-checkbox value="1" name="equipments">
-							TV
-						</a-checkbox>
-						<a-checkbox value="2" name="equipments">
-							Vidéo projecteur
+						<a-checkbox
+							v-for="equipment in equipments"
+							v-bind:key="equipment"
+							v-bind:value="equipment"
+							name="equipments"
+						>
+							{{ equipment }}
 						</a-checkbox>
 					</a-checkbox-group>
 				</a-form-item>
@@ -48,19 +51,14 @@
 <script>
 export default {
 	name: 'RoomSelector',
+	props: ['equipments'],
 	data() {
-		// const validateHours = () => {
-		// 	this.$refs.from;
-		// 	this.$refs.to;
-		// 	return false;
-		// };
-
 		return {
 			form: {
 				date: undefined,
 				from: undefined,
 				to: undefined,
-				equiments: [],
+				equipments: [],
 			},
 			rules: {
 				date: [
@@ -70,7 +68,20 @@ export default {
 						type: 'object',
 					},
 				],
-				hours: [{ required: true, message: 'please select hours' }],
+				from: [
+					{
+						required: true,
+						message: "sélectionnez l'heure de début",
+						type: 'object',
+					},
+				],
+				to: [
+					{
+						required: true,
+						message: "sélectionnez l'heure de fin",
+						type: 'object',
+					},
+				],
 			},
 		};
 	},
@@ -79,12 +90,11 @@ export default {
 			this.$refs.form
 				.validate()
 				.then(() => {
-					console.log('values', this.form);
+					this.$emit('validate', this.form);
 				})
-				.catch((error) => {
-					console.log('error', error);
+				.catch(() => {
+					console.log('RoomSelector: error');
 				});
-			console.log(this.form);
 		},
 	},
 };
@@ -92,10 +102,7 @@ export default {
 
 <style scoped lang="scss">
 .container {
-	margin: 25px;
-	padding: 25px;
-	box-shadow: -25px 25px;
-	border: solid;
+	@include container;
 	max-width: 500px;
 	text-align: center;
 }

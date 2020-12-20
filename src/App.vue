@@ -1,22 +1,18 @@
 <template>
 	<!-- <WelcomeSF /> -->
 	<Header></Header>
-	<div class="room-select">
-		<RoomSelector class=".room-form"></RoomSelector>
-	</div>
+	<router-view></router-view>
 </template>
 
 <script>
-// import WelcomeSF from './components/WelcomeSF';
+import WelcomeSF from './components/WelcomeSF';
 import Header from '@/components/Header';
-import RoomSelector from './pages/RoomSelector.vue';
 
 export default {
 	name: 'App',
 	components: {
 		// WelcomeSF,
 		Header,
-		RoomSelector,
 	},
 };
 </script>
