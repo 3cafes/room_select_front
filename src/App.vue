@@ -1,5 +1,5 @@
 <template>
-	<!-- <WelcomeSF /> -->
+	<WelcomeSF />
 	<Header></Header>
 	<router-view></router-view>
 </template>
@@ -11,7 +11,7 @@ import Header from '@/components/Header';
 export default {
 	name: 'App',
 	components: {
-		// WelcomeSF,
+		WelcomeSF,
 		Header,
 	},
 };
