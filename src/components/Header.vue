@@ -13,6 +13,11 @@ export default {
 
 <style scoped lang="scss">
 header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
 	background-color: $dark;
 	color: $light;
 	height: 60px;
@@ -26,6 +31,6 @@ img {
 
 .title {
 	@include text-1;
-	margin: auto;
+	margin-left: 13px;
 }
 </style>

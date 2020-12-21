@@ -2,7 +2,10 @@
 	<div class="container">
 		<div>
 			<h2>Salle {{ room.name }}</h2>
-			<h3>Capacité: {{ room.capacity }}, Equipments: {{ room.equipments }}</h3>
+			<h3>
+				Capacité: {{ room.capacity }}, Equipments:
+				{{ room.equipments.join(', ') }}
+			</h3>
 			<p>{{ room.description }}</p>
 		</div>
 		<a-button @click="$emit('reserve', room)">je la réserve</a-button>

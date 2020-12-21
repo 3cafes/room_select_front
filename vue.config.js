@@ -7,6 +7,16 @@ module.exports = {
 			@import "@/styles/_variables.scss";
 		  `,
 			},
+			less: {
+				lessOptions: {
+					modifyVars: {
+						'primary-color': '#ff00ae',
+						'link-color': '#ff00ae',
+						'border-radius-base': '0px',
+					},
+					javascriptEnabled: true,
+				},
+			},
 		},
 	},
 };

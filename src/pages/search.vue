@@ -1,4 +1,13 @@
 <template>
+	<div class="notification">
+		<a-alert
+			v-if="notification.show"
+			:message="notification.message"
+			:type="notification.type"
+			closable
+			:after-close="closeNotification"
+		/>
+	</div>
 	<div class="room-select">
 		<RoomSelectorForm
 			class=".room-form"
@@ -34,6 +43,7 @@ import { get_equipments } from '@/api/equipment';
 import { search_room_available, reserve_room } from '@/api/reservation';
 import Reservable from '@/components/Reservable.vue';
 import ReservationError from '@/components/ReservationError.vue';
+import Ant from 'ant-design-vue';
 
 export default {
 	name: 'Search',
@@ -43,6 +53,7 @@ export default {
 		ReservationError,
 	},
 	data: () => ({
+		notification: { show: false, type: 'success', message: ':)' },
 		equipments: [],
 		best_result: undefined,
 		other_search_results: undefined,
@@ -56,6 +67,18 @@ export default {
 			.catch(() => {});
 	},
 	methods: {
+		closeNotification() {
+			this.notification.show = false;
+		},
+		showNotification({ success, message }) {
+			this.notification.show = true;
+			this.notification.message = message;
+			if (success) {
+				this.notification.type = 'success';
+			} else {
+				this.notification.type = 'error';
+			}
+		},
 		resetResults() {
 			this.reservation = undefined;
 			this.best_result = undefined;
@@ -81,9 +104,8 @@ export default {
 					this.best_result = rooms[0];
 					this.other_search_results = rooms.slice(1);
 				})
-				.catch((e) => {
-					this.best_result = undefined;
-					this.other_search_results = undefined;
+				.catch(({ message }) => {
+					this.resetResults();
 				});
 		},
 		onReserve(room) {
@@ -94,12 +116,8 @@ export default {
 				this.reservation.from,
 				this.reservation.to
 			)
-				.then(({ message }) => {
-					console.log(message);
-				})
-				.catch((err) => {
-					console.log(err);
-				})
+				.then(this.showNotification)
+				.catch(this.showNotification)
 				.finally(() => {
 					this.resetResults();
 				});
@@ -109,6 +127,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.notification {
+	z-index: 1;
+	position: absolute;
+	top: 76px;
+	right: 13px;
+	max-width: 300px;
+}
 .reservable-container {
 	width: calc(100% - 54px);
 	max-width: 1200px;

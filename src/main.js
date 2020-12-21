@@ -9,8 +9,9 @@ import {
 	Form,
 	Checkbox,
 	InputNumber,
+	Alert,
 } from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.less';
 
 //pages
 import { createRouter, createWebHistory } from 'vue-router';
@@ -33,6 +34,7 @@ app
 	.use(TimePicker)
 	.use(Form)
 	.use(Checkbox)
-	.use(InputNumber);
+	.use(InputNumber)
+	.use(Alert);
 
 app.mount('#app');

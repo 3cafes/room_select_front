@@ -1,7 +1,9 @@
 <template>
 	<div class="container">
 		<h2>{{ message }}</h2>
-		<a-button @click="$emit('click')">{{ button_message }}</a-button>
+		<a-button type="dashed" @click="$emit('click')">{{
+			button_message
+		}}</a-button>
 	</div>
 </template>
 
@@ -20,6 +22,7 @@ export default {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	background-color: rgba(255, 0, 73, 0.1);
 }
 
 h2 {

@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-		<h1>Reservez une salle</h1>
+		<h1>RESERVEZ UNE SALLE</h1>
 		<div class="form-container">
 			<a-form
 				ref="form"
