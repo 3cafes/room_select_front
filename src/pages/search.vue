@@ -137,7 +137,7 @@ export default {
 .reservable-container {
 	width: calc(100% - 54px);
 	max-width: 1200px;
-	margin-top: 89px;
+	margin-top: 54px;
 }
 .reservable-spacer {
 	height: 21px;

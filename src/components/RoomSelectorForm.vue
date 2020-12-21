@@ -64,6 +64,36 @@ export default {
 	name: 'RoomSelector',
 	props: ['equipments'],
 	data() {
+		const validate_hours = async (rule, value) => {
+			console.log('prout :)))))');
+			if (!value) {
+				return Promise.reject(`vous devez renseigner une heure`);
+			}
+			const h = value.hours();
+			if (h < 9) {
+				return Promise.reject(`STATION F n'ouvre pas avant 9h00!`);
+			} else if (h >= 23 && value.minutes() > 0) {
+				return Promise.reject(`STATION F ferme à 23h00!`);
+			}
+			Promise.resolve();
+		};
+		const validate_from = async (rule, value) => {
+			if (this.form.from.isAfter(this.form.to)) {
+				return Promise.reject(
+					"L'heure de début ne peut pas être supérieure à l'heure de fin"
+				);
+			}
+			Promise.resolve();
+		};
+		const validate_to = async (rule, value) => {
+			if (this.form.to.isBefore(this.form.from)) {
+				return Promise.reject(
+					"L'heure de fin ne peut pas être inférieure à l'heure de début"
+				);
+			}
+			Promise.resolve();
+		};
+
 		return {
 			form: {
 				date: moment(),
@@ -76,22 +106,28 @@ export default {
 				date: [
 					{
 						required: true,
-						message: 'Please pick a date',
+						message: 'vous devez choisir une date',
 						type: 'object',
 					},
 				],
 				from: [
 					{
-						required: true,
-						message: "sélectionnez l'heure de début",
-						type: 'object',
+						trigger: 'change',
+						validator: validate_hours,
+					},
+					{
+						trigger: 'change',
+						validator: validate_from,
 					},
 				],
 				to: [
 					{
-						required: true,
-						message: "sélectionnez l'heure de fin",
-						type: 'object',
+						trigger: 'change',
+						validator: validate_hours,
+					},
+					{
+						trigger: 'change',
+						validator: validate_to,
 					},
 				],
 				capacity: [
