@@ -65,7 +65,6 @@ export default {
 	props: ['equipments'],
 	data() {
 		const validate_hours = async (rule, value) => {
-			console.log('prout :)))))');
 			if (!value) {
 				return Promise.reject(`vous devez renseigner une heure`);
 			}
